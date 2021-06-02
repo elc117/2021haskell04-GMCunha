@@ -20,8 +20,8 @@ strColor :: (Int,Int,Int) -> String
 strColor (x, y, z) = "rgb(" ++ show x ++ "," ++ show y ++ "," ++ show z ++ ")"
 
 genCircs :: Int -> (Int,Int) -> Int -> [(Int,Int,Int)]
-genCircs n t r = [(x, snd t, r) | x <- [fst t + 0*r, fst t + 2*r .. fst t + 2*(n-1)*r]]
+genCircs n (a, b) r = [(x, b, r) | x <- [a + 0*r, a + 2*r .. a + 2*(n-1)*r]]
 
 -- nessa optei por mostrar tons de vermelho entre 80 e 255 com intervalos calculados baseado no numero de tons desejado
 genReds :: Int -> [(Int,Int,Int)]
-genReds n = [(x , 0, 0) | x <- [80 + (quot 175 n)*0, 80 + (quot 175 n)*1 .. 80 + 175]]
+genReds n = take n [(x , 0, 0) | x <- [80 + (ceiling (175.0/fromIntegral n))*0, 80 + (ceiling (175.0/fromIntegral n))*1 .. 255]]
