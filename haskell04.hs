@@ -15,3 +15,12 @@ classifIdosos l = [(x, y, faixaIdoso y) | (x, y) <- l]
 
 classifIdosos' :: [(String,Int)] -> [(String,Int,String)]
 classifIdosos' l = map (\ (x, y) -> (x, y, faixaIdoso y)) l
+
+strColor :: (Int,Int,Int) -> String
+strColor (x, y, z) = "rgb(" ++ show x ++ "," ++ show y ++ "," ++ show z ++ ")"
+
+genCircs :: Int -> (Int,Int) -> Int -> [(Int,Int,Int)]
+genCircs n t r = [(x, snd t, r) | x <- [fst t + 0*r, fst t + 2*r .. fst t + 2*(n-1)*r]]
+
+genReds :: Int -> [(Int,Int,Int)]
+genReds n = [(x , 0, 0) | x <- [80 + (quot 175 n)*0, 80 + (quot 175 n)*1 .. 80 + 175]]
