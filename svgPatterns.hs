@@ -17,16 +17,16 @@ greenPalette n = [(0, 80+i*10, 0) | i <- [0..n] ]
 
 -- minhas funcoes
 genReds :: Int -> [(Int,Int,Int)]
-genReds n = [(x, 0, 0) | x <- [0 + (quot 255 n)*0, 0 + (quot 255 n)*1 .. 0 + 255]]
+genReds n = take n [(x, 0, 0) | x <- [255, 255 - (ceiling (175.0/fromIntegral n)) .. 40]]
 
 genGreen :: Int -> [(Int,Int,Int)]
-genGreen n = [(0, x, 0) | x <- [0 + (quot 255 n)*0, 0 + (quot 255 n)*1 .. 0 + 255]]
+genGreen n = take n [(0, x, 0) | x <- [255, 255 - (ceiling (175.0/fromIntegral n)) .. 40]]
 
 genBlue :: Int -> [(Int,Int,Int)]
-genBlue n = [(0, 0, x) | x <- [0 + (quot 255 n)*0, 0 + (quot 255 n)*1 .. 0 + 255]]
+genBlue n = take n [(0, 0, x) | x <- [255, 255 - (ceiling (175.0/fromIntegral n)) .. 40]]
 
 rgbPalette' :: Int -> Int -> [(Int,Int,Int)]
-rgbPalette' n p = take (n*p) $ cycle $(genReds n) ++ (genGreen n) ++ (genBlue n)
+rgbPalette' n p = take (n*p) $ cycle $ (genBlue p) ++ (genGreen p) ++ (genReds p) ++ (genGreen p)
 
 -- Paleta com n valores retirados de uma lista com sequências de R, G e B 
 -- O '$' é uma facilidade sintática que substitui parênteses
@@ -41,9 +41,8 @@ rgbPalette n = take n $ cycle [(255,0,0),(0,255,0),(0,0,255)]
 -------------------------------------------------------------------------------
 
 genRectsInLine :: Int -> Int -> [Rect]
-genRectsInLine n p = [((m*(w+gap), o*(h+gap)), w, h) | m <- [0..fromIntegral (n-1)], o <- [0..fromIntegral (p-1)]]
-  where (w,h) = (50,50)
-        gap = 10
+genRectsInLine n p = [((m*w, o*h), w, h) | m <- [0..fromIntegral (n-1)], o <- [0..fromIntegral (p-1)]]
+  where (w,h) = (10,10)
 
 
 -------------------------------------------------------------------------------
@@ -80,15 +79,15 @@ svgElements func elements styles = concat $ zipWith func elements styles
 
 main :: IO ()
 main = do
-  writeFile "rects.svg" $ svgstrs
+  writeFile "sigs.svg" $ svgstrs
   where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
         svgfigs = svgElements svgRect rects (map svgStyle palette)
         rects = genRectsInLine rectsx rectsy
         palette = rgbPalette' rectsx rectsy
-        rectsx = 10
-        rectsy = 3
+        rectsx = 65
+        rectsy = 65
         nrects = rectsx * rectsy
-        (w,h) = (1500,500) -- width,height da imagem SVG
+        (w,h) = (650,650) -- width,height da imagem SVG
 
 
 
